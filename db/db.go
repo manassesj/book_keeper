@@ -1,6 +1,9 @@
 package db
 
 import (
+	"book_keeper/db/gormDb"
+	"book_keeper/db/mock"
+	"book_keeper/models"
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -9,16 +12,20 @@ import (
 )
 
 type Dbmanager struct {
-	DB *gorm.DB
+	DB Db_interface
 }
 
-var singleInstanceDb = new()
-
-func GetDbManager() Dbmanager {
-	return singleInstanceDb
+type Db_interface interface {
+	Find(interface{})
+	Create(interface{}) error
+	Update(interface{}, string) error
 }
 
-func new() Dbmanager {
+func NewMock() Db_interface {
+	return &mock.DbMock{}
+}
+
+func NewGorm() Db_interface {
 	host := os.Getenv("DBHOST")
 	dbport := os.Getenv("DBPORT")
 	user := os.Getenv("DBUSER")
@@ -36,5 +43,26 @@ func new() Dbmanager {
 		fmt.Println("Successfully connected to database")
 	}
 
-	return Dbmanager{DB: localDb}
+	localDb.AutoMigrate(&models.Person{})
+	localDb.AutoMigrate(&models.Book{})
+
+	/*	db.Create(person)
+		for idx := range books {
+			db.Create(&books[idx])
+		}*/
+
+	return &gormDb.DbGorm{Db: localDb}
+}
+
+var db_int Db_interface
+
+func GetDbInstance() Db_interface {
+	if db_int == nil {
+		if os.Getenv("DBIMPL") == "mock" {
+			db_int = NewMock()
+		} else {
+			db_int = NewGorm()
+		}
+	}
+	return db_int
 }
