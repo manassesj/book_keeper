@@ -10,9 +10,10 @@ func Routes() *mux.Router {
 	router.HandleFunc("/people", GetPeople).Methods("GET")
 	router.HandleFunc("/person", CreatePerson).Methods("POST")
 	router.HandleFunc("/person/{id}", UpdatePerson).Methods("PUT")
-	/*	router.HandleFunc("/person/{id}", getPerson).Methods("GET")
-		router.HandleFunc("/person/{id}", deletePerson).Methods("DELETE")
-
-	*/
+	router.HandleFunc("/person/{id}", DeletePerson).Methods("DELETE")
+	router.HandleFunc("/books", GetAllBooks).Methods("GET")
+	router.HandleFunc("/book", CreateBook).Methods("POST")
+	router.HandleFunc("/book/{id}", UpdateBook).Methods("PUT")
+	router.HandleFunc("/book/{id}", DeleteBook).Methods("DELETE")
 	return router
 }

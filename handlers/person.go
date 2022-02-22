@@ -18,15 +18,12 @@ func GetPeople(rw http.ResponseWriter, r *http.Request) {
 func CreatePerson(rw http.ResponseWriter, r *http.Request) {
 	var person models.Person
 	json.NewDecoder(r.Body).Decode(&person)
-	if utils.CheckPerson(person) {
-		rw.WriteHeader(http.StatusOK)
-		rw.Write([]byte("Success"))
-		return
-	} else {
+	if !utils.CheckPerson(person) {
 		rw.WriteHeader(http.StatusBadRequest)
 		rw.Write([]byte("Fail"))
 		return
 	}
+
 	result := repository.AddPerson(person)
 
 	if result != nil {
@@ -40,15 +37,16 @@ func UpdatePerson(rw http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	var person models.Person
 	json.NewDecoder(r.Body).Decode(&person)
-	if utils.CheckPerson(person) {
-		rw.WriteHeader(http.StatusOK)
-		rw.Write([]byte("Success"))
-		return
-	} else {
+	if !utils.CheckPerson(person) {
 		rw.WriteHeader(http.StatusBadRequest)
 		rw.Write([]byte("Fail"))
 		return
 	}
 	repository.UpdatePerson(person, params["id"])
 	json.NewEncoder(rw).Encode(&person)
+}
+
+func DeletePerson(rw http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	repository.DeletePerson(models.Person{}, params["id"])
 }

@@ -12,28 +12,39 @@ import (
 	"testing"
 )
 
+type testModel struct {
+	person         models.Person
+	expectedResult int
+}
+
 func TestPostPerson(t *testing.T) {
-	f := []models.Person{
-		{
+	f := []testModel{
+		testModel{person: models.Person{
 			Name:  "Manasses",
 			Email: "manasses@",
 			Books: nil,
 		},
-		{
-			Name:  "Manasses Júlio",
-			Email: "manasses@.com",
+			expectedResult: 400,
+		},
+		testModel{person: models.Person{
+			Name:  "",
+			Email: "manasses@",
 			Books: nil,
 		},
-		{
-			Name:  "",
-			Email: "manasses@.com",
+			expectedResult: 400,
+		},
+		testModel{person: models.Person{
+			Name:  "Manasses julio",
+			Email: "manasses@hotmail.com",
 			Books: nil,
+		},
+			expectedResult: 200,
 		},
 	}
 
 	for _, test := range f {
 		var buf bytes.Buffer
-		err := json.NewEncoder(&buf).Encode(test)
+		err := json.NewEncoder(&buf).Encode(test.person)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -41,7 +52,7 @@ func TestPostPerson(t *testing.T) {
 		w := httptest.NewRecorder()
 
 		Routes().ServeHTTP(w, r)
-		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, test.expectedResult, w.Code)
 	}
 
 }

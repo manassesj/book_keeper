@@ -1,7 +1,6 @@
 package gormDb
 
 import (
-	"book_keeper/models"
 	"gorm.io/gorm"
 )
 
@@ -10,7 +9,7 @@ type DbGorm struct {
 }
 
 func (dbG *DbGorm) Create(i interface{}) error {
-	e := dbG.Db.Find(i)
+	e := dbG.Db.Create(i)
 	return e.Error
 }
 
@@ -19,6 +18,11 @@ func (dbG *DbGorm) Find(i interface{}) {
 }
 
 func (dbG *DbGorm) Update(i interface{}, id string) error {
-	e := dbG.Db.Model(&models.Person{}).Where("id = ?", id).Updates(i)
+	e := dbG.Db.Model(&i).Where("id = ?", id).Updates(i)
+	return e.Error
+}
+
+func (dbG *DbGorm) Delete(i interface{}, id string) error {
+	e := dbG.Db.Delete(&i, id)
 	return e.Error
 }

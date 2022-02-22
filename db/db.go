@@ -19,6 +19,7 @@ type Db_interface interface {
 	Find(interface{})
 	Create(interface{}) error
 	Update(interface{}, string) error
+	Delete(interface{}, string) error
 }
 
 func NewMock() Db_interface {

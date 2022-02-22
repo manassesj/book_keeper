@@ -19,3 +19,7 @@ func (*DbMock) Find(i interface{}) {
 func (*DbMock) Update(i interface{}, id string) error {
 	return nil
 }
+
+func (*DbMock) Delete(i interface{}, id string) error {
+	return nil
+}
