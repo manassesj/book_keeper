@@ -4,12 +4,9 @@ FROM golang:1.16-buster as builder
 
 WORKDIR /app
 
-COPY go.mod ./
-COPY go.sum ./
+COPY . .
 
 RUN go mod download
-
-COPY *.go ./
 
 RUN go build -o /docker-bookeeper
 

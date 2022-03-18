@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book-api
+  labels:
+    app: book-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: book-api
+  template:
+    metadata:
+      labels:
+        app: book-api
+    spec:
+      containers:
+        - name: book-api
+          image: manassesjdaitan/book-api:latest
+          ports:
+            - containerPort: 80
+          env:
+          - name: DBPASSWORD
+            value: jbqS8AHRbn
+          - name: DBHOST
+            value: database-postgresql
+          - name: DBDIALECT
+            value: postgres
+          - name: DBPORT
+            value: "5432"
+          - name: DBNAME
+            value: book_keeper
+          - name: DBUSER
+            value: postgres
+            

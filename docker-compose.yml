@@ -1,23 +1,23 @@
 version: "3.8"
 
 services:
-#  bookeeper-api:
-#    depends_on:
-#      - db
-#    build:
-#      context: .
-#    container_name: "bookeeper-rest"
-#    networks:
-#      - mynet
-#    ports:
-#      - 8080:8080
-#    environment:
-#      - DBDIALECT=${DBDIALECT}
-#      - DBHOST=${DBHOST}
-#      - DBPORT=${DBPORT}
-#      - DBUSER=${DBUSER}
-#      - DBNAME=${DBNAME}
-#      - DBPASSWORD=${DBPASSWORD}
+  bookeeper-api:
+    depends_on:
+      - db
+    build:
+      context: .
+    container_name: "bookeeper-rest"
+    networks:
+      - mynet
+    ports:
+      - 8080:8080
+    environment:
+      - DBDIALECT=${DBDIALECT}
+      - DBHOST=${DBHOST}
+      - DBPORT=${DBPORT}
+      - DBUSER=${DBUSER}
+      - DBNAME=${DBNAME}
+      - DBPASSWORD=${DBPASSWORD}
   db:
     image: postgres:12.2-alpine
     container_name: "database"
